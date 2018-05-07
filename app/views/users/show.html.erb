@@ -1,0 +1,112 @@
+  <div class="container table-responsive">   
+  <h1>Bienvenue sur votre profil <%= @user.name %></h1>
+  <% if current_user == @user%>
+  <%= link_to 'Edit Profil', edit_user_registration_path %>
+  <% end %>
+  <h2> Évènement(s) organisé(s) prochainement </h2>      
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Location</th>
+          <th>Description</th>
+          <th>Date</th>
+          <th># Attendees</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% (@user.created_events).each do |event| %>
+          <%if event.date_event.future?%>
+            <tr>
+              <td><%= event.location %></td>
+              <td><%= event.body %></td>
+              <td><%= event.date_event %></td>
+              <td><%= event.attendees.count %></td>
+              <% if event.creator == current_user %>
+                <td><%= link_to "Modifier", edit_event_path(event.id) %></td>
+                <td>  <%= link_to 'Delete', 
+                          event_path(event.id), 
+                                    method: :delete, 
+                                    data: { confirm: 'Are you sure?' } %> </td>
+              <% end%>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="container table-responsive">            
+  <h2> Prochain(s) évènement(s)</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Location</th>
+          <th>Description</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+      <% (@user.attended_events).each do |event| %>
+        <%if event.date_event.future?%>
+          <tr>
+            <td><%= event.location %></td>
+            <td><%= event.body %></td>
+            <td><%= event.date_event %></td>
+            <td><%= link_to "Voir plus d'informations", event_path(event.id) %></td>
+          </tr>
+        <% end %>  
+      <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="container table-responsive">            
+  <h2>Évènement(s) organisé(s) auparavant</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Location</th>
+          <th>Description</th>
+          <th>Date</th>
+          <th># Attendees</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% (@user.created_events).each do |event| %>
+          <%if event.date_event.past?%>
+            <tr>
+              <td><%= event.location %></td>
+              <td><%= event.body %></td>
+              <td><%= event.date_event %></td>
+              <td><%= event.attendees.count %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="container table-responsive">            
+  <h2>Évènement(s) passé(s)</h2>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Location</th>
+          <th>Description</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+      <tbody>
+      <% (@user.attended_events).each do |event| %>
+        <%if event.date_event.past?%>
+          <tr>
+            <td><%= event.location %></td>
+            <td><%= event.body %></td>
+            <td><%= event.date_event %></td>
+            <td><%= link_to "Voir plus d'informations", event_path(event.id) %></td>
+          </tr>
+        <% end %>  
+      <% end %>
+      </tbody>
+    </table>
+  </div>
