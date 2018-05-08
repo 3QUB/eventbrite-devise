@@ -13,22 +13,27 @@
 
   <div class="field">
     <%= form.label :title %>
-    <%= form.text_field :title %>
+    <%= form.text_field :title, class: 'form-control' %>
   </div>
 
   <div class="field">
-    <%= form.label :body %>
-    <%= form.text_area :body %>
+    <%= form.label :description %>
+    <%= form.text_area :body, class: 'form-control' %>
   </div>
 
   <div class="field">
     <%= form.label :location %>
-    <%= form.text_field :location %>
+    <%= form.text_field :location, class: 'form-control' %>
   </div>
 
   <div class="field">
     <%= form.label :date_event %>
-    <%= form.datetime_select :date_event %>
+    <%= form.datetime_select :date_event, class: 'form-control' %>
+  </div>
+
+    <div class="field">
+    <%= form.label :price, "Price in €" %>
+    <%= form.number_field :price, class: 'form-control'%>
   </div>
 
   <div class="actions">

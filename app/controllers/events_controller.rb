@@ -66,8 +66,27 @@ class EventsController < ApplicationController
 
   def subscribe
     @event = Event.find(params[:event_id])
+
+    @amount = @event.price * 100
+
+    customer = Stripe::Customer.create(
+      :email => params[:stripeEmail],
+      :source  => params[:stripeToken]
+    )
+  
+    charge = Stripe::Charge.create(
+      :customer    => customer.id,
+      :amount      => @amount,
+      :description => "Paiement de #{current_user.name}",
+      :currency    => "eur"
+    )
+
     @event.attendees << current_user
-    redirect_to events_path
+    redirect_to @event
+  
+    rescue Stripe::CardError => e
+      flash[:error] = e.message
+      redirect_to @event
   end
 
   def unsubscribe
@@ -84,6 +103,6 @@ class EventsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def event_params
-      params.require(:event).permit(:title, :body, :location, :date_event)
+      params.require(:event).permit(:title, :body, :location, :date_event, :price)
     end
 end
